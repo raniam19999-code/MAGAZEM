@@ -1332,56 +1332,110 @@
         }
 
         // الدالة الجديدة لإنشاء ملف PDF باستخدام html2pdf لضمان ظهور كافة التفاصيل والألوان
-        window.generatePDF = function() {
+        // الدالة النهائية: تجمع بين قوة معالجة الصور وجمال التنسيق الأصلي مع الترقيم
+        window.generatePDF = async function() {
             const magazineElement = document.getElementById('magazine-sections');
             if (!magazineElement || magazineElement.innerHTML.trim() === '') {
                 showToast("لا توجد محتويات لطباعتها في المجلة.", "error");
                 return;
             }
 
-            showToast("جاري إنشاء المجلة بصيغة PDF... يرجى الانتظار", "info");
+            const btn = document.querySelector('button[onclick="window.generatePDF()"]');
+            const originalContent = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحضير...';
+            }
 
-            // إعدادات المكتبة لضمان جودة الصور ودعم روابط Firebase الخارجية (CORS)
+            showToast("جاري تجهيز المجلة... يرجى الانتظار قليلاً", "info");
+
+            // إنشاء نسخة للطباعة وإزالة أي فئات تخفيها
+            const printClone = magazineElement.cloneNode(true);
+            printClone.classList.remove('hidden'); 
+            printClone.style.display = 'block';
+            printClone.style.backgroundColor = 'white';
+            printClone.style.padding = '15px';
+            printClone.style.width = '1024px'; // تثبيت عرض الصفحة للطباعة لضمان تناسق الـ 4 أعمدة
+
+            // إجبار شبكة المنتجات فقط على أن تكون 4 أعمدة في الطباعة
+            const grids = printClone.querySelectorAll('.grid');
+            grids.forEach(g => {
+                if (g.querySelector('.magazine-card')) {
+                    g.className = "grid grid-cols-4 gap-4"; // تثبيت 4 منتجات في الصف الواحد
+                }
+            });
+            
+            // تحويل كافة الصور لـ Base64 لتجاوز مشاكل الحماية (CORS)
+            const images = printClone.querySelectorAll('img');
+            const proxy = "https://corsproxy.io/?"; 
+            
+            const imagePromises = Array.from(images).map(async (img) => {
+                const src = img.src;
+                if (src.startsWith('data:') || src.includes('placehold.co')) return;
+                
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3500); 
+
+                    const response = await fetch(proxy + encodeURIComponent(src), { signal: controller.signal });
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) throw new Error('Fetch failed');
+                    const blob = await response.blob();
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            img.src = reader.result;
+                            resolve();
+                        };
+                        reader.readAsDataURL(blob);
+                    });
+                } catch (e) {
+                    img.setAttribute('data-html2canvas-ignore', 'true');
+                }
+            });
+
+            await Promise.all(imagePromises);
+
             const options = {
-                margin: [10, 5, 10, 5],
+                margin: [10, 5, 15, 5], // زيادة الهامش السفلي للترقيم
                 filename: `عروض_أولاد_الشيخ_${new Date().toLocaleDateString('ar-EG')}.pdf`,
-                image: { type: 'jpeg', quality: 0.92 }, // جودة ممتازة مع ضغط ذكي لتقليل الحجم
+                image: { type: 'jpeg', quality: 0.98 }, 
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true, 
-                    letterRendering: false,
-                    scrollX: 0,
-                    scrollY: 0
+                    allowTaint: false,
+                    letterRendering: true,
+                    logging: false
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            // التأكد من أن الحاوية مرئية وخلفيتها بيضاء للـ PDF
-            magazineElement.classList.remove('hidden');
-            const originalStyle = magazineElement.style.cssText;
-            magazineElement.style.backgroundColor = 'white';
-            magazineElement.style.padding = '10px';
-
-            // تشغيل عملية التحويل والحفظ
-            html2pdf().set(options).from(magazineElement).toPdf().get('pdf').then(function (pdf) {
-                const totalPages = pdf.internal.getNumberOfPages();
-                for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i);
-                    pdf.setFontSize(10);
-                    pdf.setTextColor(150);
-                    // إضافة ترقيم الصفحات في الأسفل
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const pageHeight = pdf.internal.pageSize.getHeight();
-                    pdf.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 7, { align: 'center' });
+            try {
+                // توليد الـ PDF مع إضافة ترقيم الصفحات في النهاية
+                await html2pdf().set(options).from(printClone).toPdf().get('pdf').then(function (pdf) {
+                    const totalPages = pdf.internal.getNumberOfPages();
+                    for (let i = 1; i <= totalPages; i++) {
+                        pdf.setPage(i);
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(150);
+                        const pageWidth = pdf.internal.pageSize.getWidth();
+                        const pageHeight = pdf.internal.pageSize.getHeight();
+                        pdf.text(`صفحة ${i} من ${totalPages}`, pageWidth / 2, pageHeight - 7, { align: 'center' });
+                    }
+                }).save();
+                
+                showToast("تم تحميل المجلة بنجاح.");
+            } catch (error) {
+                console.error("PDF Error:", error);
+                showToast("حدث خطأ، يرجى المحاولة مرة أخرى.", "error");
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
                 }
-            }).save().then(() => {
-                magazineElement.style.cssText = originalStyle;
-                showToast("تم تحميل المجلة بنجاح", "success");
-            }).catch(err => {
-                console.error("PDF Export Error:", err);
-                showToast("حدث خطأ أثناء تصدير ملف PDF", "error");
-            });
+            }
         };
 
         // ربط الاسم القديم بالدالة الجديدة لتعمل الأزرار الحالية تلقائياً
@@ -1460,9 +1514,40 @@
         const bannerUrlInput = document.getElementById('banner-image-url');
         if (bannerUrlInput) {
             bannerUrlInput.addEventListener('input', (e) => {
-                if (e.target.value) {
-                    bannerImagePreview.src = e.target.value;
+                const url = e.target.value.trim();
+                // لا تحاول تحميل الرابط إلا إذا كان كاملاً لتجنب أخطاء 404 في الكونسول
+                if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                    bannerImagePreview.src = url;
                     bannerImagePreview.classList.remove('hidden');
+                }
+            });
+        }
+
+        // --- إضافة وظيفة معاينة الصور عند الرفع من الجهاز (جديد) ---
+        if (productFileUpload) {
+            productFileUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        productImagePreview.src = ev.target.result;
+                        productImagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        if (bannerFileUpload) {
+            bannerFileUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        bannerImagePreview.src = ev.target.result;
+                        bannerImagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
         }
@@ -1548,9 +1633,9 @@
                 closeModal('modal-login');
             } catch (error) {
                 console.error("Login error:", error);
-                let msg = "خطأ في تسجيل الدخول. تأكد من البيانات.";
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                    msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+                let msg = `خطأ (${error.code}): تأكد من تفعيل Email/Password في Firebase ومن صحة البيانات.`;
+                if (error.code === 'auth/invalid-credential') {
+                    msg = "البريد الإلكتروني أو كلمة المرور غير صحيحة، أو أن النطاق (Vercel) غير مضاف في Authorized Domains.";
                 }
                 showToast(msg, "error");
             } finally {
