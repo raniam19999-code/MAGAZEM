@@ -4,14 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هايبر أولاد الشيخ زكريا - العروض</title>
+    <title>هايبر أولاد الشيخ- العروض</title>
     <!-- تضمين مكتبة Tailwind CSS للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- تضمين مكتبة FontAwesome للأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <!-- خطوط عربية (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- استدعاء مكتبة html2pdf لتحويل الصفحة إلى PDF احترافي -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="icon" href="imag/logo.png" type="image/png">
+
+    <script>
+        // إزالة أي Service Worker قديم لتجنب مشاكل تعارض جلب الصور (CORS) والمقاطعة
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister().then(() => {
+                        console.log('Stale ServiceWorker unregistered successfully to fix CORS issues.');
+                    });
+                }
+            });
+        }
+    </script>
 
     <script>
         tailwind.config = {
@@ -72,7 +87,7 @@
             border-top: none;
             border-right: none;
             padding: 2px 5px;
-            min-width: 85px;
+            min-width: 70px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -94,7 +109,7 @@
 
         .new-price-domty {
             color: #000;
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 900;
             line-height: 1;
             display: flex;
@@ -103,7 +118,8 @@
 
         .currency-domty {
             writing-mode: vertical-rl;
-            font-size: 8px; /* Reduced */
+            font-size: 8px;
+            /* Reduced */
             font-weight: bold;
             color: #000;
             margin-right: 2px;
@@ -116,7 +132,8 @@
             flex-grow: 1;
             text-align: right;
             font-weight: 800;
-            font-size: 13px; /* Reduced from 15px */
+            font-size: 11px;
+            /* Reduced from 15px */
             border-bottom-left-radius: 12px;
             display: flex;
             align-items: center;
@@ -125,25 +142,31 @@
         }
 
         .image-container-domty {
-            flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0;
             background: #fff;
             position: relative;
-            min-height: 0; /* Allow shrinking */
-            height: 100%;
+            min-height: 0;
+            /* Allow shrinking */
+            height: 130px;
             overflow: hidden;
         }
 
         .image-container-domty img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 8px;
+            object-fit: contain; /* عرض الصورة كاملة دون قص */
+            padding: 4px; /* مسافة بسيطة لضمان وضوح الأطراف */
+            background: #fff;
             filter: contrast(1.02) saturate(1.05);
             transition: all 0.5s ease;
+        }
+
+        /* ظل ناعم وقوي للنصوص لضمان وضوحها فوق أي صورة خلفية */
+        .banner-text-shadow {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.4);
         }
 
         /* Shimmer loading effect */
@@ -154,13 +177,38 @@
         }
 
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         .magazine-card:hover .image-container-domty img {
             transform: scale(1.1) translateY(-5px);
             filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15)) contrast(1.1);
+        }
+        
+        /* ستايل العداد التنازلي العصري فوق البنرات */
+        .countdown-container {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(22, 101, 52, 0.85); /* أخضر الهايبر مع شفافية */
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 25;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
         }
 
         .promo-badge {
@@ -190,11 +238,12 @@
 
         .back-btn-ios {
             position: fixed;
-            top: 85px; /* Moved to top */
+            top: 85px;
+            /* Moved to top */
             right: 20px;
             width: 45px;
             height: 45px;
-            background: #1e40af;
+            background: #1e3a8a;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -213,7 +262,8 @@
 
         .magazine-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns on mobile */
             gap: 0.75rem;
             padding: 8px;
             grid-auto-flow: dense;
@@ -221,20 +271,24 @@
 
         @media (min-width: 768px) {
             .magazine-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
                 gap: 1rem;
             }
         }
 
         @media (min-width: 1280px) {
             .magazine-grid {
-                grid-template-columns: repeat(5, 1fr); /* 5 columns for perfect 10-item layout */
+                grid-template-columns: repeat(8, 1fr);
+                /* 8 columns to make products smaller on desktop */
                 gap: 1.25rem;
             }
         }
 
         /* Uniform card sizes for strict pagination */
-        .card-standard, .card-wide, .card-tall, .card-large {
+        .card-standard,
+        .card-wide,
+        .card-tall,
+        .card-large {
             grid-column: span 1;
             grid-row: span 1;
         }
@@ -284,10 +338,197 @@
             opacity: 1;
             transform: translateX(0);
         }
+
+        /* تنسيقات خاصة لتحسين مظهر المجلة في ملف الـ PDF */
+        .pdf-header-banner {
+            background-color: #166534;
+            color: #ffffff;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 6px solid #ca8a04;
+            margin-bottom: 30px;
+            border-radius: 20px;
+        }
+        
+        .pdf-container-bg {
+            background-color: white !important;
+        }
+
+        /* تنسيقات الطباعة الأصلية (Native Print) لحل جميع مشاكل html2pdf */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            html, body {
+                background-color: white !important;
+                height: auto !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* ترويسة ثابتة في كل صفحة مطبوعة */
+            .print-header {
+                display: flex !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 70px;
+                background: white !important;
+                border-bottom: 3px solid #1e3a8a;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 9999;
+            }
+
+            /* تذييل ثابت في كل صفحة مطبوعة */
+            .print-footer {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 40px;
+                background: white !important;
+                border-top: 1px solid #ddd;
+                align-items: center;
+                justify-content: center;
+                font-size: 10pt;
+                z-index: 9999;
+            }
+
+            /* إخفاء كل شيء باستثناء المجلة */
+            nav, #admin-panel, #toast-container, .modal, [id^="modal-"], #back-step-btn, button, .admin-actions-overlay {
+                display: none !important;
+            }
+
+            main {
+                /* ترك مساحة للترويسة والتذييل الثابتين */
+                margin-top: 90px !important;
+                margin-bottom: 50px !important;
+                padding: 0 !important;
+                display: block !important; /* Ensure main content area is displayed */
+                width: 100% !important;
+                overflow: visible !important; /* Ensure content is not clipped */
+            }
+
+            #loading-state, #empty-state {
+                display: none !important;
+            }
+
+             /* إجبار ظهور محتوى المجلة عند الطباعة حتى لو كان مخفياً برمجياً */
+            #magazine-sections {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .fade-in {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+            /* تعديل الشبكة لتناسب ورقة الطباعة (3 أعمدة لوضوح أفضل) */
+            .magazine-grid {
+                display: grid !important;
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            section {
+                break-inside: avoid;
+                margin-bottom: 30px !important;
+            }
+            
+            .magazine-card {
+                break-inside: avoid;
+                page-break-inside: avoid !important; /* لضمان عدم تقسيم المنتج بين صفحتين */
+                border: 2px solid #1e3a8a !important;
+                box-shadow: none !important;
+                height: auto !important;
+                padding: 4px !important;
+            }
+
+            .image-container-domty {
+                height: 110px !important;
+            }
+
+            .price-box-domty {
+                background-color: #facc15 !important;
+                min-width: 65px !important;
+                padding: 1px 3px !important;
+                transform: scale(0.85);
+                transform-origin: top right;
+            }
+            .price-box-domty .new-price-domty span {
+                color: black !important; /* Ensure new price text is black */
+                font-size: 18px !important;
+            }
+            .price-box-domty .currency-domty {
+                color: black !important; /* Ensure currency text is black */
+                font-size: 7px !important;
+            }
+            .price-box-domty span:last-child {
+                font-size: 8px !important;
+            }
+            .old-price-box {
+                color: white !important; /* Ensure old price text is white */
+                background-color: #ef4444 !important; /* Force red background */
+                font-size: 9px !important;
+            }
+            .promo-badge {
+                background: #ca8a04 !important; /* Force gold background */
+                color: white !important;
+                border-color: white !important;
+            }
+            .title-bar-domty {
+                background-color: #1e3a8a !important;
+                color: white !important;
+                font-size: 10px !important;
+                padding: 3px 6px !important;
+                min-height: 28px !important;
+            }
+        }
+
+        /* تنسيق حاوية البانر المضافة حديثاً */
+        .magazine-banner {
+            width: 100%; /* يأخذ عرض المجلة بالكامل */
+            background-color: #ffffff;
+            border-bottom: 3px solid #FFD700; /* لمسة جمالية باللون الذهبي */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* لمنع خروج أي شيء عن الإطار */
+        }
+
+        /* السر هنا في تنسيق الصورة لعدم فقدان أي تفاصيل */
+        .magazine-banner img {
+            max-width: 100%; /* يمنع الصورة من الخروج عن العرض */
+            height: auto; /* الأهم: يحافظ على الأبعاد الأصلية ولا يقص الصورة */
+            display: block;
+            object-fit: contain; /* يضمن ظهور الصورة بالكامل بجميع تفاصيلها داخل الحاوية */
+            filter: contrast(1.02) saturate(1.05); /* نفس فلاتر الجودة والجمال للمنتجات */
+        }
     </style>
 </head>
 
-<body class="flex flex-col h-screen overflow-hidden bg-[#a1b0c7]">
+<body class="flex flex-col min-h-screen bg-[#a1b0c7] overflow-y-auto">
+
+    <!-- عناصر تظهر فقط عند الطباعة (الرأس والتذييل) -->
+    <div class="print-header hidden">
+        <img src="imag/logo.png" alt="Logo" class="h-14 w-14 object-contain rounded-full border-2 border-[#1e3a8a]">
+        <div class="text-[#1e3a8a] text-2xl font-black">هايبر أولاد الشيخ - مجلة العروض</div>
+        <div class="text-sm text-gray-500 font-bold" id="print-date-info"></div>
+    </div>
+    <div class="print-footer hidden">
+        <p class="font-bold text-[#1e3a8a]">العنوان: مدينة أولاد الشيخ التجارية | للتواصل: 0123456789</p>
+    </div>
 
     <!-- شريط التنقل (Navbar) -->
     <nav class="bg-[#1e3a8a] text-white shadow-lg border-b-4 border-yellow-400 sticky top-0 z-40">
@@ -298,28 +539,28 @@
                 <div>
                     <h1
                         class="text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-white tracking-tight leading-tight">
-                        هايبر أولاد الشيخ زكريا</h1>
+                        هايبر اولاد الشيخ </h1>
                     <p class="text-[10px] md:text-sm text-gray-200 opacity-90">أقوى العروض والخصومات</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 md:gap-4 flex-grow justify-end">
-                <!-- حقل البحث المدمج -->
-                <div class="relative max-w-[150px] sm:max-w-xs w-full">
-                    <input type="search" name="search-query-dummy" id="search-input" placeholder="ابحث..." autocomplete="new-password"
-                        class="w-full py-1.5 px-3 pr-9 rounded-full bg-white/10 border border-white/20 text-white text-sm focus:bg-white focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all placeholder:text-gray-300">
-                    <i
-                        class="fa-solid fa-search absolute right-3 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none"></i>
-                </div>
+                <!-- Search bar removed as per user request -->
 
+                <!-- زر مشاركة واتساب -->
+                <button id="btn-share-whatsapp"
+                    class="bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0 border border-green-400/20">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span class="hidden sm:inline">مشاركة</span>
+                </button>
                 <!-- زر تسجيل دخول الأدمن -->
                 <button id="btn-admin-login"
-                    class="bg-yellow-400 hover:bg-yellow-500 text-[#1e3a8a] font-bold py-1.5 px-3 md:py-2 md:px-4 rounded-full transition-colors flex items-center gap-2 text-xs md:text-sm shadow-sm shrink-0">
+                    class="bg-gradient-to-l from-hyper-gold to-yellow-400 hover:from-yellow-500 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-[#1e3a8a] font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0 border border-yellow-300/30">
                     <i class="fa-solid fa-user-shield"></i>
                     <span class="hidden sm:inline">الإدارة</span>
                 </button>
                 <button id="btn-admin-logout"
-                    class="hidden bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 px-3 md:py-2 md:px-4 rounded-full transition-colors flex items-center gap-2 text-xs md:text-sm shrink-0">
+                    class="hidden bg-gradient-to-l from-red-600 to-red-500 hover:from-red-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0">
                     <i class="fa-solid fa-sign-out-alt"></i>
                     <span class="hidden sm:inline">خروج</span>
                 </button>
@@ -328,45 +569,42 @@
     </nav>
 
     <!-- لوحة تحكم الإدارة (تظهر فقط للأدمن) -->
-    <div id="admin-panel" class="hidden bg-white shadow-md border-b border-gray-200 p-4">
-        <div class="container mx-auto flex flex-wrap justify-between items-center gap-4">
-            <h2 class="text-lg font-bold text-hyper-green"><i class="fa-solid fa-gear ml-2"></i>لوحة التحكم</h2>
-            <div class="flex flex-wrap gap-2">
+    <div id="admin-panel" class="hidden bg-white/90 backdrop-blur-xl shadow-xl border-b border-white/40 p-4 sm:p-6 mb-6 rounded-b-3xl mx-auto max-w-7xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-green-50/50 pointer-events-none"></div>
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shadow-inner">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-black text-gray-800 tracking-tight">لوحة تحكم الإدارة</h2>
+                    <p class="text-xs text-gray-500 font-medium">تحكم كامل وعصري في عرض المجلة</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-3">
                 <button id="btn-manage-banners"
-                    class="bg-hyper-gold hover:bg-yellow-600 text-hyper-green font-bold py-2 px-4 rounded shadow transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-images"></i> إدارة البنارات
+                    class="group relative overflow-hidden bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-6 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md hover:-translate-y-1 flex items-center gap-2">
+                    <div class="absolute inset-0 w-1 bg-yellow-400 left-0 transition-all group-hover:w-full group-hover:opacity-10 opacity-0"></div>
+                    <i class="fa-solid fa-images text-yellow-500 text-lg"></i>
+                    <span>إدارة البنارات</span>
                 </button>
                 <button id="btn-add-product"
-                    class="bg-hyper-green hover:bg-green-800 text-white font-bold py-2 px-4 rounded shadow transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i> إضافة منتج جديد
+                    class="group relative overflow-hidden bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-green-500/30">
+                    <i class="fa-solid fa-circle-plus text-lg"></i>
+                    <span>إضافة منتج جديد</span>
+                </button>
+                <button id="btn-print-pdf"
+                    class="group relative overflow-hidden bg-gradient-to-l from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-blue-500/30">
+                    <i class="fa-solid fa-print text-lg"></i>
+                    <span>طباعة المجلة PDF</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- صورة العرض الرئيسية (Hero/Banner Slider) -->
-    <div class="container mx-auto px-4 mt-2 mb-1 flex-none h-[25vh] md:h-[25vh] max-w-lg">
-        <header id="hero-section"
-            class="bg-[#1e3a8a] text-white rounded-2xl md:rounded-[2rem] shadow-2xl relative overflow-hidden h-full flex items-center border-4 border-yellow-400">
-            <div id="banner-container" class="absolute inset-0 flex transition-transform duration-1000 ease-in-out">
-                <!-- البنارات ستظهر هنا ديناميكياً -->
-            </div>
-            <!-- أزرار التحكم في البنارات (تظهر فقط إذا وجد أكثر من بنر) -->
-            <div id="banner-nav"
-                class="hidden absolute inset-0 flex items-center justify-between px-4 z-20 pointer-events-none">
-                <button id="prev-banner"
-                    class="pointer-events-auto bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all"><i
-                        class="fa-solid fa-chevron-right"></i></button>
-                <button id="next-banner"
-                    class="pointer-events-auto bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all"><i
-                        class="fa-solid fa-chevron-left"></i></button>
-            </div>
-            <div id="banner-dots" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20"></div>
-        </header>
-    </div>
-
     <!-- منطقة عرض المنتجات -->
-    <main class="flex-grow container mx-auto px-4 py-2 overflow-hidden flex flex-col h-[60vh] md:h-[65vh]">
+    <main class="flex-grow container mx-auto px-4 py-4">
 
         <!-- حالة التحميل -->
         <div id="loading-state" class="flex flex-col items-center justify-center py-20">
@@ -380,15 +618,9 @@
             <p id="empty-state-message" class="text-xl text-gray-500 font-bold">لا توجد عروض متاحة حالياً</p>
         </div>
 
-        <!-- حاوية المنتجات مع نظام الصفحات المتحرك -->
-        <div id="products-container" class="hidden flex-grow flex flex-col min-h-0">
-            <div class="flex-grow overflow-hidden relative px-1">
-                <div id="products-wrapper" class="flex h-full transition-transform duration-700 ease-in-out">
-                    <!-- الصفحات سيتم إضافتها هنا عبر الجافاسكريبت -->
-                </div>
-            </div>
-            <!-- نقاط وأزرار التحكم في الصفحات -->
-            <div id="pagination-controls" class="flex justify-center items-center flex-wrap py-2 gap-3 px-4"></div>
+        <!-- حاوية الأقسام (الديناميكية) -->
+        <div id="magazine-sections" class="hidden space-y-12 pb-20">
+            <!-- سيتم إنشاء الأقسام هنا -->
         </div>
     </main>
 
@@ -446,7 +678,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">اسم المنتج</label>
-                        <input type="text" id="product-name" required
+                        <input type="text" id="product-name"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green"
                             placeholder="مثال: جبنة دومتي عبوات 500جم">
                     </div>
@@ -454,14 +686,14 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">الحجم / الوزن</label>
-                            <input type="text" id="product-size" required
+                            <input type="text" id="product-size"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green"
                                 placeholder="مثال: 1 كيلو">
                         </div>
                         <div>
                             <label class="block text-gray-700 text-sm font-bold mb-2">السعر الحالي</label>
                             <div class="relative">
-                                <input type="number" id="product-price" step="0.01" required
+                                <input type="number" id="product-price" step="0.01"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green"
                                     placeholder="0.00">
                                 <span class="absolute left-3 top-2 text-gray-500">ج.م</span>
@@ -487,7 +719,6 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">رابط صورة المنتج</label>
-                        <input type="hidden" id="product-original-image">
                         <input type="url" id="product-image"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green"
                             placeholder="ضع رابط الصورة هنا...">
@@ -575,6 +806,23 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green"></textarea>
                     </div>
                     <div class="mb-4">
+                        <label class="block text-[#1e3a8a] text-sm font-bold mb-2">تصنيف القسم (الترتيب في المجلة)</label>
+                        <select id="banner-category" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green bg-blue-50">
+                            <option value="البقالة">1. قسم البقالة</option>
+                            <option value="الثلاجة">2. قسم الثلاجة</option>
+                            <option value="المجمدات">3. قسم المجمدات</option>
+                            <option value="المنظفات">4. قسم المنظفات</option>
+                            <option value="الورقيات">5. قسم الورقيات</option>
+                            <option value="عروض متنوعة">6. عروض متنوعة</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">تاريخ انتهاء العرض (اختياري للعداد التنازلي)</label>
+                        <input type="datetime-local" id="banner-expiry-date"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green">
+                        <p class="text-[10px] text-gray-500 mt-1 italic">اتركيه فارغاً إذا كنتِ لا تريدين ظهور عداد تنازلي.</p>
+                    </div>
+                    <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">رابط صورة البنر (أو ارفعي ملفاً
                             بالأسفل)</label>
                         <input type="url" id="banner-image-url"
@@ -589,7 +837,8 @@
                         <input type="file" id="banner-file-upload" accept="image/*"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2">
                         <img id="banner-image-preview"
-                            class="mt-4 hidden max-h-48 w-full object-cover border border-gray-200 rounded-xl shadow-lg"
+                            class="mt-4 hidden max-h-80 w-full object-cover border border-gray-200 rounded-xl shadow-lg bg-white"
+                            class="mt-4 hidden w-full h-40 md:h-52 object-contain border border-gray-200 rounded-xl shadow-lg bg-white"
                             src="">
                     </div>
                     <div class="flex justify-end gap-2 mt-6">
@@ -625,7 +874,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js"; // يمكن إزالتها إذا لم تستخدم التحليلات
-        import { getAuth, signInWithEmailAndPassword, signOut, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, signInAnonymously, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
@@ -644,26 +893,26 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
+        
+        // ضبط استمرارية تسجيل الدخول في المتصفح
+        setPersistence(auth, browserLocalPersistence);
+
         const storage = getStorage(app); // تهيئة Firebase Storage
         const db = getFirestore(app);
 
         // 2. حالة التطبيق (State)
-        let currentPage = 0;
-        const productsPerPage = 10;
         let currentUser = null;
         let products = [];
         let banners = [];
-        let currentBannerIndex = 0;
-        let bannerTimer = null;
-        let isAdmin = false; 
+        // استعادة حالة الأدمن من المتصفح فوراً لتجنب اختفاء اللوحة عند التحميل
+        let isAdmin = localStorage.getItem('isAdmin') === 'true';
         let productToDelete = null;
-        let bannerToDelete = null;
-        let searchQuery = ''; 
+
+        // حل مشكلة الخطأ window.handleImageLoad is not a function
+        window.handleImageLoad = () => {};
 
         // 3. عناصر DOM
-        const elContainer = document.getElementById('products-container');
-        const elWrapper = document.getElementById('products-wrapper');
-        const elPagination = document.getElementById('pagination-controls');
+        const elMagazineSections = document.getElementById('magazine-sections');
         const elLoading = document.getElementById('loading-state');
         const elEmpty = document.getElementById('empty-state');
         const elEmptyMessage = document.getElementById('empty-state-message'); // عنصر رسالة الحالة الفارغة
@@ -679,20 +928,18 @@
         const formProduct = document.getElementById('product-form');
         const productFileUpload = document.getElementById('product-file-upload');
         const productImagePreview = document.getElementById('product-image-preview');
-        const searchInput = document.getElementById('search-input'); // حقل البحث
 
         const btnManageBanners = document.getElementById('btn-manage-banners');
         const modalBannersList = document.getElementById('modal-banners-list');
         const modalBannerEdit = document.getElementById('modal-banner-edit');
         const bannersListContainer = document.getElementById('banners-list-container');
+        const btnShareWhatsapp = document.getElementById('btn-share-whatsapp');
+        const btnPrintPdf = document.getElementById('btn-print-pdf');
         const bannerForm = document.getElementById('banner-form');
         const bannerFileUpload = document.getElementById('banner-file-upload');
         const bannerImagePreview = document.getElementById('banner-image-preview');
-        const bannerContainer = document.getElementById('banner-container');
-        const bannerNav = document.getElementById('banner-nav');
-        const bannerDots = document.getElementById('banner-dots');
 
-        // تحديث واجهة الإدارة فوراً إذا كان المستخدم مسجلاً
+        // تحديث الواجهة بناءً على القيمة المحفوظة في localStorage
         if (isAdmin) {
             elAdminPanel.classList.remove('hidden');
             btnLogin.classList.add('hidden');
@@ -700,7 +947,7 @@
         }
 
         // 4. دوال مساعدة (Utils)
-        function showToast(message, type = 'success') {
+        window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
@@ -710,6 +957,7 @@
 
             if (type === 'success') { bgClass = 'bg-green-600'; icon = 'fa-check-circle'; }
             else if (type === 'error') { bgClass = 'bg-red-600'; icon = 'fa-circle-xmark'; }
+            else if (type === 'info') { bgClass = 'bg-blue-600'; icon = 'fa-info-circle'; }
 
             toast.className = `${bgClass} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0`;
             toast.innerHTML = `<i class="fa-solid ${icon} text-xl"></i> <span class="font-semibold">${message}</span>`;
@@ -725,7 +973,17 @@
             setTimeout(() => {
                 toast.classList.add('opacity-0');
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }, 4000); // زيادة الوقت قليلاً ليتمكن المستخدم من القراءة
+        }
+
+
+
+        // دالة لمشاركة رابط المجلة عبر واتساب
+        function shareMagazineOnWhatsApp() {
+            const magazineUrl = window.location.href;
+            const message = `تصفح أحدث عروض هايبر أولاد الشيخ من هنا: ${magazineUrl}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
         }
 
         // تحديث خيارات البنارات في فورم المنتجات
@@ -782,43 +1040,34 @@
             } else { bannerImagePreview.classList.add('hidden'); bannerImagePreview.src = ''; }
         });
 
-        // 5. المصادقة (Authentication) - متطلب أساسي لقاعدة البيانات
-        const initAuth = async () => {
-            // تسجيل دخول مجهول فقط إذا لم يكن هناك مستخدم مسجل (مثل الأدمن)
-            if (!auth.currentUser) {
-                try {
-                    await signInAnonymously(auth);
-                    console.log("تم تسجيل الدخول المجهول بنجاح");
-                } catch (error) {
-                    console.error("فشل تسجيل الدخول المجهول:", error);
-                    if (error.code === 'auth/admin-restricted-operation') {
-                        showToast("تنبيه: خاصية تسجيل الدخول المجهول غير مفعلة في Firebase Console. يرجى تفعيلها ليتمكن المستخدمون من رؤية المنتجات.", "error");
-                    }
-                    fetchProducts();
-                }
-            }
-        };
-
         onAuthStateChanged(auth, (user) => {
-            if (user && !user.isAnonymous) {
-                isAdmin = true;
-                currentUser = user;
-                btnLogin.classList.add('hidden');
-                btnLogout.classList.remove('hidden');
-                elAdminPanel.classList.remove('hidden');
+            if (user) {
+                if (!user.isAnonymous) {
+                    // مستخدم مسجل (أدمن)
+                    isAdmin = true;
+                    localStorage.setItem('isAdmin', 'true');
+                    currentUser = user;
+                    btnLogin.classList.add('hidden');
+                    btnLogout.classList.remove('hidden');
+                    elAdminPanel.classList.remove('hidden');
+                } else {
+                    // مستخدم مجهول (زائر)
+                    isAdmin = false;
+                    localStorage.removeItem('isAdmin');
+                    currentUser = user;
+                    btnLogin.classList.remove('hidden');
+                    btnLogout.classList.add('hidden');
+                    elAdminPanel.classList.add('hidden');
+                }
             } else {
+                // لا يوجد مستخدم إطلاقاً -> قم بتسجيل دخول مجهول للزوار
                 isAdmin = false;
-                currentUser = user;
-                btnLogin.classList.remove('hidden');
-                btnLogout.classList.add('hidden');
-                elAdminPanel.classList.add('hidden');
+                localStorage.removeItem('isAdmin');
+                signInAnonymously(auth).catch(err => console.error("Anonymous login error:", err));
             }
             fetchProducts();
             fetchBanners();
         });
-
-        // بدء المصادقة
-        initAuth();
 
         // 6. التعامل مع البيانات (Firestore)
         let isProductsListenerActive = false;
@@ -829,7 +1078,7 @@
             const productsRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
             onSnapshot(productsRef, (snapshot) => {
                 products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderProducts();
+                renderMagazine();
             }, (error) => {
                 console.error("خطأ في جلب البيانات:", error);
                 showToast("تعذر جلب المنتجات", "error");
@@ -844,220 +1093,166 @@
             const bannersRef = collection(db, 'artifacts', appId, 'public', 'data', 'banners');
             onSnapshot(bannersRef, (snapshot) => {
                 banners = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderBanners();
-                renderProducts();
+                renderMagazine();
                 renderBannersList();
             }, (error) => {
                 console.error("خطأ في جلب البنارات:", error);
             });
         }
 
-        // 7. عرض المنتجات في الواجهة (نظام الشبكة الموحدة)
-        function renderProducts() {
+        // 7. عرض المجلة بنظام الأقسام
+        function renderMagazine() {
             elLoading.classList.add('hidden');
-            elWrapper.innerHTML = '';
-            elPagination.innerHTML = '';
+            elMagazineSections.innerHTML = '';
 
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            const filteredProducts = products;
 
-            if (filteredProducts.length === 0) {
-                elContainer.classList.add('hidden');
+            if (products.length === 0 && banners.length === 0) {
+                elMagazineSections.classList.add('hidden');
                 elEmpty.classList.remove('hidden');
-                elEmptyMessage.innerText = products.length === 0 ? 'لا توجد عروض متاحة حالياً' : 'لا توجد نتائج تطابق بحثك';
                 return;
             }
 
             elEmpty.classList.add('hidden');
-            elContainer.classList.remove('hidden');
+            elMagazineSections.classList.remove('hidden');
 
-            const pageCount = Math.ceil(filteredProducts.length / productsPerPage);
-            if (currentPage >= pageCount) currentPage = Math.max(0, pageCount - 1);
+            // ترتيب الأقسام بناءً على التصنيف
+            const categoryPriority = {
+                "البقالة": 1,
+                "الثلاجة": 2,
+                "المجمدات": 3,
+                "المنظفات": 4,
+                "الورقيات": 5,
+                "عروض متنوعة": 6
+            };
 
-            for (let i = 0; i < pageCount; i++) {
-                const pageGrid = document.createElement('div');
-                pageGrid.className = "w-full shrink-0 magazine-grid h-full";
-
-                const start = i * productsPerPage;
-                const pageProducts = filteredProducts.slice(start, start + productsPerPage);
-
-                pageProducts.forEach((product, pIdx) => {
-                    const discountPercent = product.discountManual || 0;
-                    const hasDiscount = discountPercent > 0;
-                    const productSize = product.size || '';
-                    const productPrice = product.price || 0;
-
-                    const defaultImage = "https://placehold.co/400x300/166534/ffffff?text=صورة+المنتج&font=Cairo";
-                    const imgUrl = product.image || defaultImage;
-
-                    const card = document.createElement('div');
-                    card.className = `bg-white magazine-card rounded-2xl overflow-hidden flex flex-col fade-in card-standard shadow-sm hover:shadow-md transition-shadow`;
-
-                    const oldPrice = hasDiscount ? (productPrice / (1 - (discountPercent / 100))).toFixed(2) : null;
-
-                    let discountBadge = hasDiscount ? `
-                        <div class="promo-badge">
-                            <span class="discount-percent">%${discountPercent}</span>
-                            <span>خصم</span>
-                        </div>
-                    ` : '';
-
-                    let adminControlsHTML = isAdmin ? `
-                        <div class="admin-actions-overlay">
-                            <button onclick="window.editProduct('${product.id}')" class="admin-action-btn btn-edit-premium" title="تعديل">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="window.deleteProductPrompt('${product.id}')" class="admin-action-btn btn-delete-premium" title="حذف">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    ` : '';
-
-                    card.innerHTML = `
-                        <div class="card-header border-b border-gray-50">
-                            <div class="price-box-domty scale-90 origin-top-right">
-                                <div class="new-price-domty flex flex-col items-center leading-tight">
-                                    ${hasDiscount ? `<span class="old-price-box text-[9px] px-1 line-through opacity-70 mb-0.5">${oldPrice}</span>` : ''}
-                                    <span class="text-lg font-black">${productPrice} <small class="text-[9px] font-bold">ج.م</small></span>
-                                    <span class="text-[10px] font-bold opacity-80 mt-0.5">${productSize}</span>
-                                </div>
-                            </div>
-                            <div class="title-bar-domty line-clamp-1">${product.name}</div>
-                        </div>
-                        <div class="image-container-domty group relative bg-gray-50">
-                            <div class="absolute inset-0 shimmer z-0"></div>
-                            <img src="${imgUrl}" alt="${product.name}" class="relative z-10 opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove()">
-                            ${discountBadge}
-                            ${adminControlsHTML}
-                        </div>
-                    `;
-                    pageGrid.appendChild(card);
-                });
-                elWrapper.appendChild(pageGrid);
-            }
-
-            renderPagination(pageCount);
-            updateSliderPosition();
-        }
-
-        function renderPagination(pageCount) {
-            if (pageCount <= 1) return;
-            for (let i = 0; i < pageCount; i++) {
-                const dot = document.createElement('button');
-                dot.className = `h-3 rounded-full transition-all duration-300 ${i === currentPage ? 'bg-hyper-gold w-8' : 'bg-gray-300 w-3 hover:bg-gray-400'}`;
-                dot.onclick = () => window.goToPage(i);
-                elPagination.appendChild(dot);
-            }
-        }
-
-        window.goToPage = (index) => {
-            currentPage = index;
-            updateSliderPosition();
-            renderProducts();
-        }
-
-        function updateSliderPosition() {
-            const offset = currentPage * 100;
-            elWrapper.style.transform = `translateX(${offset}%)`;
-        }
-
-        // --- وظائف البنارات (Slider Logic) ---
-        function renderBanners() {
-            bannerContainer.innerHTML = '';
-            bannerDots.innerHTML = '';
-
-            if (banners.length === 0) {
-                bannerContainer.innerHTML = `
-                    <div class="w-full shrink-0 relative flex items-center justify-center p-10 text-center min-h-[500px]">
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60"></div>
-                        <div class="relative z-10">
-                            <h2 class="text-4xl md:text-7xl font-black mb-4 text-white drop-shadow-2xl">مجلة عروض التوفير</h2>
-                            <p class="text-lg md:text-2xl text-gray-100 max-w-3xl mx-auto font-medium">أفضل المنتجات بأفضل الأسعار لجميع احتياجاتكم.</p>
-                        </div>
-                    </div>
-                `;
-                bannerNav.classList.add('hidden');
-                bannerDots.classList.add('hidden');
-                return;
-            }
-
-            banners.forEach((banner, index) => {
-                const slide = document.createElement('div');
-                slide.className = "w-full shrink-0 relative flex items-center justify-center p-4 text-center h-full";
-                slide.style.backgroundImage = banner.image ? `url(${banner.image})` : 'none';
-                slide.style.backgroundSize = 'cover';
-                slide.style.backgroundPosition = 'center';
-                slide.style.imageRendering = 'high-quality'; // Enhanced quality
-
-                slide.innerHTML = `
-                    <div class="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
-                    <div class="relative z-10 fade-in px-4">
-                        <h2 class="text-2xl md:text-5xl font-black mb-2 text-white drop-shadow-2xl">${banner.heading || 'مجلة عروض التوفير'}</h2>
-                        <p class="text-sm md:text-xl text-gray-100 max-w-2xl mx-auto font-medium drop-shadow-lg">${banner.subheading || 'تصفح أحدث العروض والخصومات الحصرية'}</p>
-                    </div>
-                `;
-                bannerContainer.appendChild(slide);
-
-                const dot = document.createElement('button');
-                dot.className = `w-3 h-3 rounded-full transition-all ${index === currentBannerIndex ? 'bg-yellow-400 w-8' : 'bg-white/50'}`;
-                dot.onclick = () => goToBanner(index);
-                bannerDots.appendChild(dot);
+            const sortedBanners = [...banners].sort((a, b) => {
+                const pA = categoryPriority[a.category] || 99;
+                const pB = categoryPriority[b.category] || 99;
+                return pA - pB;
             });
 
-            if (banners.length > 1) {
-                bannerNav.classList.remove('hidden');
-                bannerDots.classList.remove('hidden');
-                startBannerAutoPlay();
-            } else {
-                bannerNav.classList.add('hidden');
-                bannerDots.classList.add('hidden');
-            }
-            updateBannerPosition();
-        }
-
-        function updateBannerPosition() {
-            const offset = currentBannerIndex * 100;
-            bannerContainer.style.transform = `translateX(${offset}%)`;
-            Array.from(bannerDots.children).forEach((dot, idx) => {
-                if (idx === currentBannerIndex) {
-                    dot.classList.add('bg-yellow-400', 'w-8');
-                    dot.classList.remove('bg-white/50');
-                } else {
-                    dot.classList.remove('bg-yellow-400', 'w-8');
-                    dot.classList.add('bg-white/50');
+            // 1. عرض أقسام البنارات مرتبة
+            let currentCategory = null;
+            sortedBanners.forEach(banner => {
+                if (banner.category !== currentCategory) {
+                    renderCategoryHeader(banner.category);
+                    currentCategory = banner.category;
+                }
+                
+                const sectionProducts = filteredProducts.filter(p => p.bannerId === banner.id);
+                if (sectionProducts.length > 0 || isAdmin) {
+                    renderSection(banner, sectionProducts);
                 }
             });
-        }
 
-        function goToBanner(index) {
-            currentBannerIndex = index;
-            updateBannerPosition();
-            startBannerAutoPlay();
-        }
-
-        function nextBanner() {
-            currentBannerIndex = (currentBannerIndex + 1) % banners.length;
-            updateBannerPosition();
-        }
-
-        function prevBanner() {
-            currentBannerIndex = (currentBannerIndex - 1 + banners.length) % banners.length;
-            updateBannerPosition();
-        }
-
-        function startBannerAutoPlay() {
-            if (bannerTimer) clearInterval(bannerTimer);
-            if (banners.length > 1) {
-                bannerTimer = setInterval(nextBanner, 5000);
+            // 2. عرض المنتجات التي ليس لها بنر (عروض عامة)
+            const generalProducts = filteredProducts.filter(p => !p.bannerId);
+            if (generalProducts.length > 0) {
+                renderSection(null, generalProducts);
             }
         }
 
-        document.getElementById('next-banner').onclick = () => { nextBanner(); startBannerAutoPlay(); };
-        document.getElementById('prev-banner').onclick = () => { prevBanner(); startBannerAutoPlay(); };
+        // دالة لعرض عنوان القسم الكبير
+        function renderCategoryHeader(categoryName) {
+            const header = document.createElement('div');
+            header.className = "flex flex-col items-center justify-center pt-14 pb-8 relative";
+            header.innerHTML = `
+                <div class="relative z-10 text-center">
+                    <span class="text-hyper-gold text-xs font-bold uppercase tracking-[0.2em] mb-2 block opacity-80">قسم عروض</span>
+                    <h2 class="text-[#1e3a8a] text-4xl md:text-5xl font-black relative inline-block">
+                        ${categoryName}
+                        <span class="absolute -bottom-3 right-0 left-0 h-2 bg-gradient-to-l from-hyper-gold/60 to-transparent rounded-full"></span>
+                    </h2>
+                </div>
+                <div class="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent -z-0"></div>
+            `;
+            elMagazineSections.appendChild(header);
+        }
+
+        function renderSection(banner, sectionProducts) {
+            const section = document.createElement('section');
+            section.className = "fade-in";
+
+            // تصميم رأس القسم (البنر)
+            if (banner) {
+                const countdownHTML = banner.expiryDate ? `
+                    <div class="countdown-container" data-expiry="${banner.expiryDate}">
+                        <i class="fa-solid fa-clock-rotate-left text-yellow-400"></i>
+                        <span class="timer-text font-bold">--:--:--</span>
+                    </div>
+                ` : '';
+
+                section.innerHTML = `
+                    <div class="relative w-[95%] mx-auto h-56 md:h-80 rounded-3xl overflow-hidden mb-6 shadow-xl border-4 border-yellow-400 bg-white flex items-center justify-center">
+                        <img src="${banner.image}" crossorigin="anonymous" class="w-full h-full object-cover block">
+                    <div class="relative w-[80%] max-w-4xl mx-auto h-40 md:h-52 rounded-3xl overflow-hidden mb-6 shadow-xl border-4 border-yellow-400 bg-white flex items-center justify-center">
+                        <img src="${banner.image}" crossorigin="anonymous" class="w-full h-full object-contain block">
+                        ${countdownHTML}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-6">
+                            <h2 class="text-white text-xl md:text-3xl font-black banner-text-shadow">${banner.heading || ''}</h2>
+                            <p class="text-gray-200 text-xs md:text-lg font-medium banner-text-shadow">${banner.subheading || ''}</p>
+                            <h2 class="text-white text-lg md:text-2xl font-black banner-text-shadow">${banner.heading || ''}</h2>
+                            <p class="text-gray-200 text-[10px] md:text-sm font-medium banner-text-shadow">${banner.subheading || ''}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                section.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-1 flex-grow bg-gradient-to-l from-[#1e3a8a] to-transparent"></div>
+                        <h2 class="text-[#1e3a8a] text-2xl font-black px-4">عروض إضافية</h2>
+                        <div class="h-1 flex-grow bg-gradient-to-r from-[#1e3a8a] to-transparent"></div>
+                    </div>
+                `;
+            }
+
+            // شبكة المنتجات
+            const grid = document.createElement('div');
+            grid.className = "magazine-grid";
+            
+            sectionProducts.forEach(product => {
+                const discountPercent = product.discountManual || 0;
+                const hasDiscount = discountPercent > 0;
+                const productPrice = product.price || 0;
+                const oldPrice = hasDiscount ? (productPrice / (1 - (discountPercent / 100))).toFixed(2) : null;
+                const imgUrl = product.image || "https://placehold.co/400x300/166534/ffffff?text=صورة+المنتج&font=Cairo";
+
+                const card = document.createElement('div');
+                card.className = `bg-white magazine-card rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow`;
+                card.innerHTML = `
+                    <div class="card-header border-b border-gray-50">
+                        <div class="price-box-domty scale-90 origin-top-right">
+                            <div class="new-price-domty flex flex-col items-center leading-tight">
+                                ${hasDiscount ? `<span class="old-price-box text-[9px] px-1 line-through opacity-70 mb-0.5">${oldPrice}</span>` : ''}
+                                <span class="text-lg font-black">${productPrice} <small class="text-[9px] font-bold">ج.م</small></span>
+                                <span class="text-[10px] font-bold opacity-80 mt-0.5">${product.size || ''}</span>
+                            </div>
+                        </div>
+                        <div class="title-bar-domty line-clamp-1">${product.name}</div>
+                    </div>
+                    <div class="image-container-domty group relative bg-gray-50">
+                        <img src="${imgUrl}" crossorigin="anonymous" alt="${product.name}" class="relative z-10 transition-opacity duration-300" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=صورة+غير+متاحة';">
+                        ${hasDiscount ? `<div class="promo-badge"><span class="discount-percent">%${discountPercent}</span><span>خصم</span></div>` : ''}
+                        ${isAdmin ? `
+                            <div class="admin-actions-overlay">
+                                <button onclick="window.editProduct('${product.id}')" class="admin-action-btn btn-edit-premium"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="window.deleteProductPrompt('${product.id}')" class="admin-action-btn btn-delete-premium"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            section.appendChild(grid);
+            elMagazineSections.appendChild(section);
+        }
+
+
 
         // دالة لضغط الصورة وتحويلها إلى Blob بجودة عالية جداً للرفع على التخزين
-        async function compressImageToBlob(file, maxWidth = 1920, quality = 0.8) {
+        async function compressImageToBlob(file, maxWidth = 3840, quality = 0.98) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -1114,6 +1309,65 @@
             });
         }
 
+        // الدالة الجديدة لإنشاء ملف PDF باستخدام html2pdf لضمان ظهور كافة التفاصيل والألوان
+        window.generatePDF = function() {
+            const magazineElement = document.getElementById('magazine-sections');
+            if (!magazineElement || magazineElement.innerHTML.trim() === '') {
+                showToast("لا توجد محتويات لطباعتها في المجلة.", "error");
+                return;
+            }
+
+            showToast("جاري إنشاء المجلة بصيغة PDF... يرجى الانتظار", "info");
+
+            // إعدادات المكتبة لضمان جودة الصور ودعم روابط Firebase الخارجية (CORS)
+            const options = {
+                margin: [10, 5, 10, 5],
+                filename: `عروض_أولاد_الشيخ_${new Date().toLocaleDateString('ar-EG')}.pdf`,
+                image: { type: 'jpeg', quality: 0.92 }, // جودة ممتازة مع ضغط ذكي لتقليل الحجم
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    letterRendering: false,
+                    scrollX: 0,
+                    scrollY: 0
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // التأكد من أن الحاوية مرئية وخلفيتها بيضاء للـ PDF
+            magazineElement.classList.remove('hidden');
+            const originalStyle = magazineElement.style.cssText;
+            magazineElement.style.backgroundColor = 'white';
+            magazineElement.style.padding = '10px';
+
+            // تشغيل عملية التحويل والحفظ
+            html2pdf().set(options).from(magazineElement).toPdf().get('pdf').then(function (pdf) {
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(150);
+                    // إضافة ترقيم الصفحات في الأسفل
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    pdf.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 7, { align: 'center' });
+                }
+            }).save().then(() => {
+                magazineElement.style.cssText = originalStyle;
+                showToast("تم تحميل المجلة بنجاح", "success");
+            }).catch(err => {
+                console.error("PDF Export Error:", err);
+                showToast("حدث خطأ أثناء تصدير ملف PDF", "error");
+            });
+        };
+
+        // ربط الاسم القديم بالدالة الجديدة لتعمل الأزرار الحالية تلقائياً
+        window.printMagazineToPdf = window.generatePDF;
+
+        // حذف أي وظائف قديمة قد تسبب أخطاء CORS
+        window.prepareImagesForPdf = undefined;
+
         // --- وظائف إدارة البنارات في لوحة التحكم ---
         function renderBannersList() {
             const container = document.getElementById('banners-list-container');
@@ -1138,6 +1392,7 @@
             });
         }
 
+
         // 8. أزرار الإدارة العامة
         btnManageBanners.onclick = () => openModal('modal-banners-list');
         document.getElementById('btn-add-new-banner').onclick = () => {
@@ -1154,6 +1409,8 @@
             document.getElementById('banner-id').value = banner.id;
             document.getElementById('banner-heading').value = banner.heading || '';
             document.getElementById('banner-subheading').value = banner.subheading || '';
+            document.getElementById('banner-category').value = banner.category || 'البقالة';
+            document.getElementById('banner-expiry-date').value = banner.expiryDate || '';
 
             // إذا كانت الصورة رابطاً وليست Base64، نضعها في خانة الرابط
             if (banner.image && !banner.image.startsWith('data:')) {
@@ -1219,6 +1476,8 @@
                 const bannerData = {
                     heading: document.getElementById('banner-heading').value,
                     subheading: document.getElementById('banner-subheading').value,
+                    category: document.getElementById('banner-category').value,
+                    expiryDate: document.getElementById('banner-expiry-date').value,
                     image: imageUrl,
                     updatedAt: Date.now()
                 };
@@ -1238,11 +1497,11 @@
             }
         };
 
-        searchInput.addEventListener('input', () => {
-            searchQuery = searchInput.value.trim();
-            currentPage = 0;
-            renderProducts();
-        });
+        // إضافة مستمع حدث لزر مشاركة واتساب
+        btnShareWhatsapp.addEventListener('click', shareMagazineOnWhatsApp);
+
+        // إضافة مستمع حدث لزر طباعة PDF
+        btnPrintPdf.addEventListener('click', printMagazineToPdf);
 
         btnLogin.addEventListener('click', () => openModal('modal-login'));
 
@@ -1261,6 +1520,7 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
+                localStorage.setItem('isAdmin', 'true');
                 showToast("تم الدخول بنجاح كمسؤول", "success");
                 closeModal('modal-login');
             } catch (error) {
@@ -1279,6 +1539,7 @@
         btnLogout.addEventListener('click', async () => {
             try {
                 await signOut(auth);
+                localStorage.removeItem('isAdmin');
                 showToast("تم تسجيل الخروج بأمان");
             } catch (error) {
                 showToast("حدث خطأ أثناء تسجيل الخروج", "error");
@@ -1288,7 +1549,6 @@
         document.getElementById('btn-add-product').addEventListener('click', () => {
             formProduct.reset();
             document.getElementById('product-id').value = '';
-            document.getElementById('product-original-image').value = '';
             document.getElementById('modal-product-title').innerText = 'إضافة منتج جديد';
             productImagePreview.classList.add('hidden');
             productImagePreview.src = '';
@@ -1300,7 +1560,6 @@
             const product = products.find(p => p.id === id);
             if (!product) return;
             document.getElementById('product-id').value = product.id;
-            document.getElementById('product-original-image').value = product.image || '';
             document.getElementById('product-name').value = product.name || '';
             document.getElementById('product-size').value = product.size || '';
             document.getElementById('product-price').value = product.price || '';
@@ -1366,9 +1625,11 @@
             const file = productFileUpload.files[0];
             const urlInput = document.getElementById('product-image').value;
             let imageUrl = urlInput;
-            
-            if (!imageUrl && !file) {
-                imageUrl = document.getElementById('product-original-image').value;
+
+            // التحقق من وجود صورة فقط (إما ملف مرفوع أو رابط)
+            if (!file && !urlInput && !id) {
+                showToast("يرجى اختيار صورة للمنتج أولاً", "error");
+                return;
             }
 
             const productData = {
@@ -1387,7 +1648,7 @@
             try {
                 if (file) {
                     // ضغط ورفع الصورة إلى Firebase Storage
-                    const compressedBlob = await compressImageToBlob(file, 1200, 0.8);
+                    const compressedBlob = await compressImageToBlob(file, 3840, 0.98);
                     const fileName = `products/${Date.now()}_${file.name}`;
                     const storageRef = ref(storage, fileName);
                     await uploadBytes(storageRef, compressedBlob);
@@ -1408,7 +1669,7 @@
                     showToast("تم إضافة المنتج بنجاح");
                 }
                 closeModal('modal-product');
-                productFileUpload.value = ''; 
+                productFileUpload.value = '';
                 productImagePreview.classList.add('hidden');
             } catch (error) {
                 console.error("Error saving:", error);
@@ -1446,39 +1707,58 @@
             }
         });
 
-        // --- إضافة خاصية السحب (Swipe) للموبايل ---
-        let touchStartX = 0;
-        let touchEndX = 0;
+        // وظيفة زر العودة للأعلى
+        const scrollToTopBtn = document.getElementById('scroll-to-top-btn');
 
-        // سحب البنارات
-        const bannerSlider = document.getElementById('hero-section');
-        if (bannerSlider) {
-            bannerSlider.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-            bannerSlider.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                if (touchStartX - touchEndX > 50) { nextBanner(); startBannerAutoPlay(); }
-                if (touchEndX - touchStartX > 50) { prevBanner(); startBannerAutoPlay(); }
-            }, { passive: true });
+        // تأكد من أن الزر موجود قبل إضافة مستمعي الأحداث
+        if (scrollToTopBtn) {
+            window.onscroll = function() {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+                    scrollToTopBtn.classList.add('opacity-100', 'visible');
+                } else {
+                    scrollToTopBtn.classList.remove('opacity-100', 'visible');
+                    scrollToTopBtn.classList.add('opacity-0', 'invisible');
+                }
+            };
+
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         }
 
-        // سحب صفحات المنتجات
-        const productSlider = document.getElementById('products-wrapper');
-        if (productSlider) {
-            productSlider.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-            productSlider.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                const filteredLength = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).length;
-                const pageCount = Math.ceil(filteredLength / productsPerPage);
-                if (touchStartX - touchEndX > 50 && currentPage < pageCount - 1) window.goToPage(currentPage + 1);
-                if (touchEndX - touchStartX > 50 && currentPage > 0) window.goToPage(currentPage - 1);
-            }, { passive: true });
-        }
+        // دالة تحديث كافة العدادات التنازلية في الصفحة
+        function updateAllCountdowns() {
+            const timers = document.querySelectorAll('.countdown-container');
+            timers.forEach(timer => {
+                const expiryStr = timer.getAttribute('data-expiry');
+                if (!expiryStr) return;
+                
+                const expiry = new Date(expiryStr).getTime();
+                const now = new Date().getTime();
+                const diff = expiry - now;
 
+                if (diff <= 0) {
+                    timer.innerHTML = `<i class="fa-solid fa-hourglass-end text-yellow-400"></i> <span class="text-[10px] md:text-xs">انتهى العرض</span>`;
+                    timer.classList.add('bg-red-600');
+                    return;
+                }
+
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const textSpan = timer.querySelector('.timer-text');
+                if (textSpan) {
+                    textSpan.innerText = `${d > 0 ? d + ' يوم - ' : ''}${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                }
+            });
+        }
+        setInterval(updateAllCountdowns, 1000);
     </script>
-    <!-- سهم الرجوع للموبايل -->
-    <div id="back-step-btn" class="back-btn-ios" onclick="window.history.back()">
-        <i class="fa-solid fa-arrow-right"></i>
-    </div>
 </body>
-
 </html>
