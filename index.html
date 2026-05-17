@@ -86,8 +86,8 @@
             border: 2px solid #1e3a8a;
             border-top: none;
             border-right: none;
-            padding: 2px 5px;
-            min-width: 70px;
+            padding: 2px 6px;
+            min-width: 65px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -143,17 +143,20 @@
         .title-bar-domty {
             background: #1e3a8a;
             color: #fff;
-            padding: 4px 10px;
+            padding: 6px 10px;
             flex-grow: 1;
             text-align: right;
             font-weight: 800;
-            font-size: 11px;
-            /* Reduced from 15px */
+            font-size: 12px;
             border-bottom-left-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
             min-height: 36px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.4;
         }
 
         .image-container-domty {
@@ -284,11 +287,18 @@
 
         .magazine-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            /* 3 columns on mobile */
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 columns on mobile for perfect text and details visibility */
             gap: 0.75rem;
             padding: 8px;
             grid-auto-flow: dense;
+        }
+
+        @media (min-width: 540px) {
+            .magazine-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.85rem;
+            }
         }
 
         @media (min-width: 768px) {
@@ -571,20 +581,20 @@
 
                 <!-- زر مشاركة واتساب -->
                 <button id="btn-share-whatsapp"
-                    class="bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0 border border-green-400/20">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    <span class="hidden sm:inline">مشاركة</span>
+                    class="bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-2xl transition-all flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-md shrink-0 border border-green-400/20">
+                    <i class="fa-brands fa-whatsapp text-sm sm:text-base"></i>
+                    <span>مشاركة</span>
                 </button>
                 <!-- زر تسجيل دخول الأدمن -->
                 <button id="btn-admin-login"
-                    class="bg-gradient-to-l from-hyper-gold to-yellow-400 hover:from-yellow-500 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-[#1e3a8a] font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0 border border-yellow-300/30">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <span class="hidden sm:inline">الإدارة</span>
+                    class="bg-gradient-to-l from-hyper-gold to-yellow-400 hover:from-yellow-500 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-[#1e3a8a] font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-2xl transition-all flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-md shrink-0 border border-yellow-300/30">
+                    <i class="fa-solid fa-user-shield text-sm sm:text-base"></i>
+                    <span>الإدارة</span>
                 </button>
                 <button id="btn-admin-logout"
-                    class="hidden bg-gradient-to-l from-red-600 to-red-500 hover:from-red-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-2 px-4 rounded-2xl transition-all flex items-center gap-2 text-xs md:text-sm shadow-md shrink-0">
-                    <i class="fa-solid fa-sign-out-alt"></i>
-                    <span class="hidden sm:inline">خروج</span>
+                    class="hidden bg-gradient-to-l from-red-600 to-red-500 hover:from-red-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-2xl transition-all flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-md shrink-0">
+                    <i class="fa-solid fa-sign-out-alt text-sm sm:text-base"></i>
+                    <span>خروج</span>
                 </button>
             </div>
         </div>
@@ -606,19 +616,19 @@
             
             <div class="flex flex-wrap justify-center gap-3">
                 <button id="btn-manage-banners"
-                    class="group relative overflow-hidden bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-6 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md hover:-translate-y-1 flex items-center gap-2">
+                    class="group relative overflow-hidden bg-white hover:bg-gray-50 text-gray-800 font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md hover:-translate-y-1 flex items-center gap-2 text-xs sm:text-base">
                     <div class="absolute inset-0 w-1 bg-yellow-400 left-0 transition-all group-hover:w-full group-hover:opacity-10 opacity-0"></div>
-                    <i class="fa-solid fa-images text-yellow-500 text-lg"></i>
+                    <i class="fa-solid fa-images text-yellow-500 text-base sm:text-lg"></i>
                     <span>إدارة البنارات</span>
                 </button>
                 <button id="btn-add-product"
-                    class="group relative overflow-hidden bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-green-500/30">
-                    <i class="fa-solid fa-circle-plus text-lg"></i>
+                    class="group relative overflow-hidden bg-gradient-to-l from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-green-500/30 text-xs sm:text-base">
+                    <i class="fa-solid fa-circle-plus text-base sm:text-lg"></i>
                     <span>إضافة منتج جديد</span>
                 </button>
                 <button id="btn-print-pdf"
-                    class="group relative overflow-hidden bg-gradient-to-l from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-blue-500/30">
-                    <i class="fa-solid fa-print text-lg"></i>
+                    class="group relative overflow-hidden bg-gradient-to-l from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-2xl shadow-md transition-all hover:shadow-lg hover:-translate-y-1 flex items-center gap-2 border border-blue-500/30 text-xs sm:text-base">
+                    <i class="fa-solid fa-print text-base sm:text-lg"></i>
                     <span>طباعة المجلة PDF</span>
                 </button>
             </div>
@@ -841,6 +851,11 @@
                             <option value="الورقيات">5. قسم الورقيات</option>
                             <option value="عروض متنوعة">6. عروض متنوعة</option>
                         </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-[#1e3a8a] text-sm font-bold mb-2">ترتيب ظهور البنر في الصفحة (رقم: 1، 2، 3...)</label>
+                        <input type="number" id="banner-order" min="1" max="999" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-hyper-green bg-yellow-50" placeholder="مثال: 1 (للظهور في أول الصفحة)">
+                        <p class="text-[10px] text-gray-500 mt-1">اكتب رقم الترتيب (1 للأول، 2 للثاني، 3 للثالث، وهكذا). سيتم عرض البنارات ومنتجاتها في الصفحة حسب هذا الرقم.</p>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">تاريخ انتهاء العرض (اختياري للعداد التنازلي)</label>
@@ -1148,10 +1163,21 @@
                 "عروض متنوعة": 6
             };
 
-            const sortedBanners = [...banners].sort((a, b) => {
+            // 1. فصل البنارات التي ليس لها ترتيب مخصص وترتيبها بالوضع الافتراضي (حسب القسم)
+            const defaultBanners = banners.filter(b => b.order === undefined || b.order === null || b.order === '').sort((a, b) => {
                 const pA = categoryPriority[a.category] || 99;
                 const pB = categoryPriority[b.category] || 99;
                 return pA - pB;
+            });
+
+            // 2. جلب البنارات التي لها ترتيب مخصص وترتيبها حسب رقم الترتيب
+            const customOrderedBanners = banners.filter(b => b.order !== undefined && b.order !== null && b.order !== '').sort((a, b) => Number(a.order) - Number(b.order));
+
+            // 3. دمج البنارات بحيث يتم إدراج كل بنر مخصص في موضعه الدقيق بالصفحة (رقم الترتيب)
+            const sortedBanners = [...defaultBanners];
+            customOrderedBanners.forEach(banner => {
+                const targetIndex = Math.max(0, Number(banner.order) - 1);
+                sortedBanners.splice(targetIndex, 0, banner);
             });
 
             // 1. عرض أقسام البنارات مرتبة
@@ -1206,16 +1232,12 @@
                 ` : '';
 
                 section.innerHTML = `
-                    <div class="relative w-[95%] mx-auto h-56 md:h-80 rounded-3xl overflow-hidden mb-6 shadow-xl border-4 border-yellow-400 bg-white flex items-center justify-center">
-                        <img src="${banner.image}" class="w-full h-full object-cover block" loading="lazy">
-                    <div class="relative w-[80%] max-w-4xl mx-auto h-40 md:h-52 rounded-3xl overflow-hidden mb-6 shadow-xl border-4 border-yellow-400 bg-white flex items-center justify-center">
+                    <div class="relative w-[95%] md:w-[85%] max-w-4xl mx-auto h-44 sm:h-52 md:h-64 rounded-3xl overflow-hidden mb-6 shadow-xl border-4 border-yellow-400 bg-white flex items-center justify-center">
                         <img src="${banner.image}" class="w-full h-full object-contain block" loading="lazy">
                         ${countdownHTML}
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-6">
-                            <h2 class="text-white text-xl md:text-3xl font-black banner-text-shadow">${banner.heading || ''}</h2>
-                            <p class="text-gray-200 text-xs md:text-lg font-medium banner-text-shadow">${banner.subheading || ''}</p>
-                            <h2 class="text-white text-lg md:text-2xl font-black banner-text-shadow">${banner.heading || ''}</h2>
-                            <p class="text-gray-200 text-[10px] md:text-sm font-medium banner-text-shadow">${banner.subheading || ''}</p>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-6 pointer-events-none">
+                            <h2 class="text-white text-base sm:text-xl md:text-3xl font-black banner-text-shadow leading-tight mb-1">${banner.heading || ''}</h2>
+                            <p class="text-gray-200 text-xs sm:text-sm md:text-lg font-medium banner-text-shadow leading-snug">${banner.subheading || ''}</p>
                         </div>
                     </div>
                 `;
@@ -1231,7 +1253,7 @@
 
             // شبكة المنتجات
             const grid = document.createElement('div');
-            grid.className = "magazine-grid";
+            grid.className = "magazine-grid grid";
             
             sectionProducts.forEach(product => {
                 const discountPercent = product.discountManual || 0;
@@ -1244,17 +1266,17 @@
                 card.className = `bg-white magazine-card rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow`;
                 card.innerHTML = `
                     <div class="card-header border-b border-gray-50">
-                        <div class="price-box-domty scale-90 origin-top-right">
+                        <div class="price-box-domty origin-top-right shrink-0">
                             <div class="new-price-domty flex flex-col items-center leading-tight">
                                 ${hasDiscount ? `<span class="old-price-box mb-1">${oldPrice}</span>` : ''}
-                                <span class="text-2xl font-black text-[#1e3a8a]">${productPrice} <small class="text-[10px] font-bold">ج.م</small></span>
+                                <span class="text-xl sm:text-2xl font-black text-[#1e3a8a]">${productPrice} <small class="text-[10px] font-bold">ج.م</small></span>
                                 <span class="text-[11px] font-bold text-gray-800 mt-0.5">${product.size || ''}</span>
                             </div>
                         </div>
-                        <div class="title-bar-domty line-clamp-1">${product.name}</div>
+                        <div class="title-bar-domty">${product.name}</div>
                     </div>
-                    <div class="image-container-domty group relative bg-gray-50">
-                        <img src="${imgUrl}" alt="${product.name}" class="relative z-10 transition-opacity duration-300" loading="lazy" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=صورة+غير+متاحة';">
+                    <div class="image-container-domty group relative bg-gray-50 flex-grow">
+                        <img src="${imgUrl}" alt="${product.name}" class="relative z-10 transition-opacity duration-300 w-full h-full object-contain p-2" loading="lazy" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=صورة+غير+متاحة';">
                         ${hasDiscount ? `<div class="promo-badge"><span class="discount-percent">%${discountPercent}</span><span>خصم</span></div>` : ''}
                         ${isAdmin ? `
                             <div class="admin-actions-overlay">
@@ -1450,16 +1472,43 @@
             if (!container) return;
             container.innerHTML = '';
 
-            banners.forEach(banner => {
+            const categoryPriority = {
+                "البقالة": 1,
+                "الثلاجة": 2,
+                "المجمدات": 3,
+                "المنظفات": 4,
+                "الورقيات": 5,
+                "عروض متنوعة": 6
+            };
+
+            const defaultBanners = banners.filter(b => b.order === undefined || b.order === null || b.order === '').sort((a, b) => {
+                const pA = categoryPriority[a.category] || 99;
+                const pB = categoryPriority[b.category] || 99;
+                return pA - pB;
+            });
+
+            const customOrderedBanners = banners.filter(b => b.order !== undefined && b.order !== null && b.order !== '').sort((a, b) => Number(a.order) - Number(b.order));
+
+            const listBanners = [...defaultBanners];
+            customOrderedBanners.forEach(banner => {
+                const targetIndex = Math.max(0, Number(banner.order) - 1);
+                listBanners.splice(targetIndex, 0, banner);
+            });
+
+            listBanners.forEach(banner => {
+                const orderDisplay = (banner.order !== undefined && banner.order !== null) ? `ترتيب #${banner.order}` : `بدون ترتيب مخصص`;
                 const card = document.createElement('div');
                 card.className = "bg-white border rounded-xl p-4 shadow-sm flex items-center gap-4";
                 card.innerHTML = `
-                            <img src="${banner.image || ''}" class="w-20 h-20 object-cover rounded-lg bg-gray-100">
+                            <img src="${banner.image || ''}" class="w-20 h-20 object-cover rounded-lg bg-gray-100 shrink-0">
                             <div class="flex-grow">
-                                <h4 class="font-bold text-hyper-green">${banner.heading || 'بدون عنوان'}</h4>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="bg-hyper-gold text-[#1e3a8a] text-[10px] font-bold px-2 py-0.5 rounded-md">${orderDisplay}</span>
+                                </div>
+                                <h4 class="font-bold text-hyper-green line-clamp-1">${banner.heading || 'بدون عنوان'}</h4>
                                 <p class="text-xs text-gray-500 line-clamp-1">${banner.subheading || ''}</p>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 shrink-0">
                                 <button onclick="window.editBanner('${banner.id}')" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors"><i class="fa-solid fa-edit"></i></button>
                                 <button onclick="window.deleteBanner('${banner.id}')" class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
                             </div>
@@ -1474,6 +1523,7 @@
         document.getElementById('btn-add-new-banner').onclick = () => {
             bannerForm.reset();
             document.getElementById('banner-id').value = '';
+            document.getElementById('banner-order').value = '';
             document.getElementById('modal-banner-title').innerText = 'إضافة بنر جديد';
             bannerImagePreview.classList.add('hidden');
             openModal('modal-banner-edit');
@@ -1486,6 +1536,7 @@
             document.getElementById('banner-heading').value = banner.heading || '';
             document.getElementById('banner-subheading').value = banner.subheading || '';
             document.getElementById('banner-category').value = banner.category || 'البقالة';
+            document.getElementById('banner-order').value = (banner.order !== undefined && banner.order !== null) ? banner.order : '';
             document.getElementById('banner-expiry-date').value = banner.expiryDate || '';
 
             // إذا كانت الصورة رابطاً وليست Base64، نضعها في خانة الرابط
@@ -1580,10 +1631,12 @@
                     btn.innerText = 'حفظ البنر';
                     return;
                 }
+                const orderVal = document.getElementById('banner-order').value;
                 const bannerData = {
                     heading: document.getElementById('banner-heading').value,
                     subheading: document.getElementById('banner-subheading').value,
                     category: document.getElementById('banner-category').value,
+                    order: orderVal !== '' ? Number(orderVal) : null,
                     expiryDate: document.getElementById('banner-expiry-date').value,
                     image: imageUrl,
                     updatedAt: Date.now()
